@@ -33,5 +33,5 @@ This dashboard will later be replicated in Power BI.
 ---
 
 **Author:** Aditya Raj Majumder  
-🎓 Junior Data Analyst
+🎓 Junior Data Analyst  
 🔗 [LinkedIn](https://www.linkedin.com/in/aditya-raj-majumder-600533250/) | [GitHub](https://github.com/Aditya-Raj-Majumder)
