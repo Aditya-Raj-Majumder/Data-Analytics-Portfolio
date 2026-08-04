@@ -18,7 +18,6 @@ It was built as part of my IBM Data Analyst Professional Certificate.
 
 ## ⚙️ Tools Used
 - Microsoft Excel (PivotTables, Charts, Slicers, Conditional Formatting)
-- Power Query (Data Cleaning)
 - Power BI (planned extension)
 
 ## 📂 File Contents
