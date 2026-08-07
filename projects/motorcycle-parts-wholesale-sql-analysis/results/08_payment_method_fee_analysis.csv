@@ -1,0 +1,4 @@
+payment,n_orders,pct_of_orders,avg_fee_pct,total_fees_paid
+Credit card,659,65.9,3.0,3308.15
+Transfer,225,22.5,1.0,1596.42
+Cash,116,11.6,0.0,0.0
