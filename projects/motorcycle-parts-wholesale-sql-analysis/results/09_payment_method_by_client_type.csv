@@ -1,4 +1,0 @@
-client_type,payment,n_orders,pct_within_client_type,fees_paid
-Retail,Credit card,659,85.0,3308.15
-Retail,Cash,116,15.0,0.0
-Wholesale,Transfer,225,100.0,1596.42
