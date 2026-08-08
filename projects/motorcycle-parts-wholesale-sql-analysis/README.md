@@ -340,5 +340,5 @@ as a practice dataset).*
 ---
 
 **Author:** Aditya Raj Majumder  
-🎓 Aspiring Data Analyst  
+🎓 Junior Data Analyst  
 🔗 [LinkedIn](https://www.linkedin.com/in/aditya-raj-majumder-600533250/) | [GitHub](https://github.com/Aditya-Raj-Majumder)
