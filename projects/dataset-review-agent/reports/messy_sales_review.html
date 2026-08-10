@@ -1,0 +1,571 @@
+<!DOCTYPE html><html lang='en'><head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>Dataset review — messy_sales.csv</title>
+<link rel='preconnect' href='https://fonts.googleapis.com'>
+<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
+<link href='https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap' rel='stylesheet'>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans',system-ui,sans-serif;background:#F5F6F8;color:#14192B;
+line-height:1.65;padding:48px 24px;font-size:15px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:960px;margin:0 auto}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+
+.masthead{border-bottom:2px solid #14192B;padding-bottom:20px;margin-bottom:0}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;
+text-transform:uppercase;color:#5C6577}
+.masthead h1{font-size:30px;font-weight:600;letter-spacing:-.02em;margin:6px 0 4px}
+.masthead .sub{color:#5C6577;font-size:14px}
+
+.ledger{display:flex;border:1px solid #DCE0E7;border-top:none;background:#fff}
+.ledger .cell{flex:1;padding:16px 18px;border-right:1px solid #DCE0E7}
+.ledger .cell:last-child{border-right:none}
+.ledger .k{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;
+text-transform:uppercase;color:#5C6577;margin-bottom:5px}
+.ledger .v{font-size:24px;font-weight:600;font-family:'IBM Plex Mono',monospace;
+letter-spacing:-.02em}
+.ledger .v small{font-size:13px;font-weight:400;color:#5C6577;letter-spacing:0}
+
+.sevbar{display:flex;height:8px;border:1px solid #DCE0E7;border-top:none;overflow:hidden}
+.sevbar span{display:block}
+
+h2{font-size:13px;font-family:'IBM Plex Mono',monospace;letter-spacing:.16em;
+text-transform:uppercase;color:#14192B;margin:44px 0 14px;padding-bottom:8px;
+border-bottom:1px solid #DCE0E7}
+
+.steps{counter-reset:s;list-style:none}
+.steps li{counter-increment:s;position:relative;padding:10px 0 10px 44px;
+border-bottom:1px solid #E6E9ED}
+.steps li:last-child{border-bottom:none}
+.steps li::before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:11px;
+font-family:'IBM Plex Mono',monospace;font-size:12px;color:#1F4C73;font-weight:500}
+
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;
+text-transform:uppercase;color:#5C6577;text-align:left;padding:8px 10px;
+border-bottom:1px solid #DCE0E7;font-weight:500}
+td{padding:8px 10px;border-bottom:1px solid #E6E9ED;vertical-align:top}
+td.num,th.num{text-align:right;font-family:'IBM Plex Mono',monospace}
+tbody tr:hover{background:#FAFBFC}
+
+.finding{background:#fff;border:1px solid #DCE0E7;border-left:3px solid;
+border-radius:0;padding:18px 20px;margin-bottom:14px}
+.finding .head{display:flex;align-items:baseline;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.finding h3{font-size:16px;font-weight:600;letter-spacing:-.01em}
+.pill{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;
+text-transform:uppercase;padding:2.5px 7px;border:1px solid;border-radius:2px;white-space:nowrap}
+.finding p{margin-bottom:9px;font-size:14px}
+.finding .lbl{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;
+text-transform:uppercase;color:#5C6577;display:block;margin-bottom:2px}
+pre{background:#14192B;color:#E8EAEF;padding:12px 14px;overflow-x:auto;font-size:12.5px;
+font-family:'IBM Plex Mono',monospace;line-height:1.55;margin-top:10px}
+code{font-family:'IBM Plex Mono',monospace;font-size:.92em;background:#EDEFF3;
+padding:1px 4px;border-radius:2px}
+pre code{background:none;padding:0;color:inherit}
+
+.hist{display:flex;align-items:flex-end;gap:2px;height:36px;margin-top:6px}
+.hist span{flex:1;background:#1F4C73;min-height:1px;opacity:.75}
+
+.colcard{background:#fff;border:1px solid #DCE0E7;padding:14px 16px;margin-bottom:10px}
+.colcard .name{font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:14px}
+.colcard .meta{font-size:12px;color:#5C6577;margin:3px 0 8px}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:8px;
+font-family:'IBM Plex Mono',monospace;font-size:12px}
+.kv div span{display:block;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+color:#5C6577}
+
+footer{margin-top:52px;padding-top:18px;border-top:1px solid #DCE0E7;font-size:13px;
+color:#5C6577}
+@media(max-width:720px){
+  body{padding:24px 14px}.ledger{flex-wrap:wrap}.ledger .cell{flex:1 1 50%;
+  border-bottom:1px solid #DCE0E7}
+}
+</style></head><body><div class='wrap'>
+<header class='masthead'>
+<div class='eyebrow'>Dataset review</div>
+<h1 class='mono'>messy_sales.csv</h1>
+<div class='sub'>Generated 09 August 2026, 21:38 · a starting point for analysis, not a verdict on the data</div>
+</header>
+<div class='ledger'>
+<div class='cell'><div class='k'>Rows</div><div class='v'>922</div></div>
+<div class='cell'><div class='k'>Columns</div><div class='v'>15</div></div>
+<div class='cell'><div class='k'>Empty cells</div><div class='v'>14.8<small>%</small></div></div>
+<div class='cell'><div class='k'>Duplicate rows</div><div class='v'>22</div></div>
+<div class='cell'><div class='k'>Issues</div><div class='v'>24</div></div>
+</div>
+<div class='sevbar'><span style="width:37.5%;background:#A61B2B"></span><span style="width:29.2%;background:#A8660A"></span><span style="width:33.3%;background:#4C5670"></span></div>
+<div style='font-family:IBM Plex Mono,monospace;font-size:11px;color:#5C6577;margin-top:7px;letter-spacing:.05em'>9 high · 7 medium · 8 low</div>
+<h2>Where to start</h2>
+<ol class='steps'>
+<li>Convert placeholder text to real nulls first. Every count you run before this will be wrong in a way that does not announce itself.</li>
+<li>Fix the dtypes next. Numbers and dates trapped as text cannot be aggregated or filtered correctly.</li>
+<li>Normalise text categories before any groupby, or your category totals will be split across spelling variants.</li>
+<li>Establish the true row key before joining anything to this dataset.</li>
+<li>Decide what to do about the exact duplicate rows — they affect every total in the dataset.</li>
+<li>Once the above are done, the columns in the best shape to analyse first are: <code>order_date</code>, <code>Revenue</code>, <code>Discount</code>, <code>Quantity</code>, <code>Customer Age</code>.</li>
+</ol>
+<h2>Findings</h2>
+<div class='finding' style='border-left-color:#A61B2B'>
+<div class='head'>
+<h3>22 exactly duplicated rows</h3>
+<span class='pill' style='color:#A61B2B;border-color:#A61B2B'>High</span>
+<span class='pill' style='color:#5C6577;border-color:#DCE0E7'>Decide</span>
+</div>
+<p>22 rows (2.39%) are identical to another row across every column.</p>
+<p><span class='lbl'>Why it matters</span>Every count, sum and average is inflated by these rows. If they reached you through a join, the duplication may be multiplicative rather than additive.</p>
+<p><span class='lbl'>What to do</span>Decide whether these are genuine repeated events (two identical orders in the same second is possible but unusual) or an export artefact. Check whether the source system has a row identifier that would distinguish them before dropping anything.</p>
+<pre><code>df[df.duplicated(keep=False)].sort_values(list(df.columns))</code></pre>
+</div>
+<div class='finding' style='border-left-color:#A61B2B'>
+<div class='head'>
+<h3><code>City</code> uses placeholder text for missing values</h3>
+<span class='pill' style='color:#A61B2B;border-color:#A61B2B'>High</span>
+<span class='pill' style='color:#5C6577;border-color:#DCE0E7'>Fix</span>
+</div>
+<p>44 values are placeholders rather than real data: <code>-</code>, <code>unknown</code>. Pandas does not read these as null.</p>
+<p><span class='lbl'>Why it matters</span>These count as a legitimate category in any groupby or value_counts, and they will not be caught by <code>.isna()</code>. A 'top city' analysis could return 'unknown' as a real answer.</p>
+<p><span class='lbl'>What to do</span>Convert them to proper nulls before doing anything else.</p>
+<pre><code>df['City'] = df['City'].replace(['-', 'unknown'], pd.NA)</code></pre>
+</div>
+<div class='finding' style='border-left-color:#A61B2B'>
+<div class='head'>
+<h3><code>City</code> has inconsistent capitalisation or spacing</h3>
+<span class='pill' style='color:#A61B2B;border-color:#A61B2B'>High</span>
+<span class='pill' style='color:#5C6577;border-color:#DCE0E7'>Fix</span>
+</div>
+<p>12 distinct values collapse to 5 once case and whitespace are normalised — 7 are duplicates in different clothing.</p>
+<p><span class='lbl'>Why it matters</span>Any groupby, join or value_counts splits these across variants. A city with 300 orders can appear as three cities with 100 each, and nothing in the output tells you it happened.</p>
+<p><span class='lbl'>What to do</span>Normalise before aggregating. Be careful with <code>.title()</code> on proper nouns — it breaks names like <code>McAllen</code> and <code>O'Brien</code>.</p>
+<pre><code>df['City'] = df['City'].str.strip().str.lower()</code></pre>
+</div>
+<div class='finding' style='border-left-color:#A61B2B'>
+<div class='head'>
+<h3><code>Discount</code> holds numbers stored as text</h3>
+<span class='pill' style='color:#A61B2B;border-color:#A61B2B'>High</span>
+<span class='pill' style='color:#5C6577;border-color:#DCE0E7'>Fix</span>
+</div>
+<p>100.0% of values parse as numbers once currency symbols, commas and percent signs are stripped. Examples: <code>5.5%</code>, <code>17.8%</code>, <code>34.0%</code>.</p>
+<p><span class='lbl'>Why it matters</span>Arithmetic, sorting and aggregation all behave wrongly on text. Sorting puts <code>$9.00</code> after <code>$10.00</code>, and <code>.mean()</code> fails outright.</p>
+<p><span class='lbl'>What to do</span>Strip the symbols and convert to a numeric dtype.</p>
+<pre><code>df['Discount'] = pd.to_numeric(
+    df['Discount'].astype(str).str.replace(r'[$£€₹,%\s]', '', regex=True),
+    errors='coerce')</code></pre>
+</div>
+<div class='finding' style='border-left-color:#A61B2B'>
+<div class='head'>
+<h3><code>Email</code> looks like an identifier but is not unique</h3>
+<span class='pill' style='color:#A61B2B;border-color:#A61B2B'>High</span>
+<span class='pill' style='color:#5C6577;border-color:#DCE0E7'>Decide</span>
+</div>
+<p>900 distinct values across 922 rows — 22 rows share an identifier with another row.</p>
+<p><span class='lbl'>Why it matters</span>If you join on this column, matching rows multiply: a value appearing twice on each side produces four rows. This is the single most common cause of silently inflated totals.</p>
+<p><span class='lbl'>What to do</span>Establish what actually makes a row unique before joining. It may be this column combined with a date or a line number.</p>
+<pre><code>df['Email'].value_counts().loc[lambda s: s &gt; 1].head(20)</code></pre>
+</div>
+<div class='finding' style='border-left-color:#A61B2B'>
+<div class='head'>
+<h3><code>Order ID</code> looks like an identifier but is not unique</h3>
+<span class='pill' style='color:#A61B2B;border-color:#A61B2B'>High</span>
+<span class='pill' style='color:#5C6577;border-color:#DCE0E7'>Decide</span>
+</div>
+<p>882 distinct values across 922 rows — 40 rows share an identifier with another row.</p>
+<p><span class='lbl'>Why it matters</span>If you join on this column, matching rows multiply: a value appearing twice on each side produces four rows. This is the single most common cause of silently inflated totals.</p>
+<p><span class='lbl'>What to do</span>Establish what actually makes a row unique before joining. It may be this column combined with a date or a line number.</p>
+<pre><code>df['Order ID'].value_counts().loc[lambda s: s &gt; 1].head(20)</code></pre>
+</div>
+<div class='finding' style='border-left-color:#A61B2B'>
+<div class='head'>
+<h3><code>Quantity</code> contains negative values</h3>
+<span class='pill' style='color:#A61B2B;border-color:#A61B2B'>High</span>
+<span class='pill' style='color:#5C6577;border-color:#DCE0E7'>Decide</span>
+</div>
+<p>10 values are below zero, with a minimum of -1.00. The column name suggests it should not be negative.</p>
+<p><span class='lbl'>Why it matters</span>Sums and averages are pulled down by values that may not be real measurements at all.</p>
+<p><span class='lbl'>What to do</span>These are often codes rather than quantities — <code>-1</code> standing for 'unknown', or a negative amount marking a return or refund. Find out which before aggregating, and separate them if they are a different kind of event.</p>
+<pre><code>df[df['Quantity'] &lt; 0].head(20)</code></pre>
+</div>
+<div class='finding' style='border-left-color:#A61B2B'>
+<div class='head'>
+<h3><code>Revenue</code> holds numbers stored as text</h3>
+<span class='pill' style='color:#A61B2B;border-color:#A61B2B'>High</span>
+<span class='pill' style='color:#5C6577;border-color:#DCE0E7'>Fix</span>
+</div>
+<p>100.0% of values parse as numbers once currency symbols, commas and percent signs are stripped. Examples: <code>$1,836.47</code>, <code>$2,406.41</code>, <code>$1,119.91</code>.</p>
+<p><span class='lbl'>Why it matters</span>Arithmetic, sorting and aggregation all behave wrongly on text. Sorting puts <code>$9.00</code> after <code>$10.00</code>, and <code>.mean()</code> fails outright.</p>
+<p><span class='lbl'>What to do</span>Strip the symbols and convert to a numeric dtype.</p>
+<pre><code>df['Revenue'] = pd.to_numeric(
+    df['Revenue'].astype(str).str.replace(r'[$£€₹,%\s]', '', regex=True),
+    errors='coerce')</code></pre>
+</div>
+<div class='finding' style='border-left-color:#A61B2B'>
+<div class='head'>
+<h3><code>order_date</code> holds dates stored as text</h3>
+<span class='pill' style='color:#A61B2B;border-color:#A61B2B'>High</span>
+<span class='pill' style='color:#5C6577;border-color:#DCE0E7'>Fix</span>
+</div>
+<p>100.0% of values parse as dates. Examples: <code>2026-01-28</code>, <code>2025-05-26</code>, <code>2025-08-05</code>.</p>
+<p><span class='lbl'>Why it matters</span>You cannot filter by range, resample, or extract month and weekday from text. Mixed formats in the same column are also a real risk here — <code>03/04/2025</code> is ambiguous between April 3rd and March 4th.</p>
+<p><span class='lbl'>What to do</span>Convert to datetime, and check the day/month order against a value you can verify independently before trusting it.</p>
+<pre><code>df['order_date'] = pd.to_datetime(df['order_date'], errors='coerce')</code></pre>
+</div>
+<div class='finding' style='border-left-color:#A8660A'>
+<div class='head'>
+<h3>Columns holding identical data</h3>
+<span class='pill' style='color:#A8660A;border-color:#A8660A'>Medium</span>
+<span class='pill' style='color:#5C6577;border-color:#DCE0E7'>Fix</span>
+</div>
+<p>These column pairs contain exactly the same values: <code>Channel</code> = <code>Sales Channel</code>.</p>
+<p><span class='lbl'>Why it matters</span>Redundant columns waste memory and, more importantly, will inflate any correlation matrix or feature-importance ranking you build.</p>
+<p><span class='lbl'>What to do</span>Keep one of each pair and drop the other.</p>
+<pre><code>df = df.drop(columns=['Sales Channel'])</code></pre>
+</div>
+<div class='finding' style='border-left-color:#A8660A'>
+<div class='head'>
+<h3><code>Customer Age</code> may use sentinel values for missing data</h3>
+<span class='pill' style='color:#A8660A;border-color:#A8660A'>Medium</span>
+<span class='pill' style='color:#5C6577;border-color:#DCE0E7'>Decide</span>
+</div>
+<p><code>0</code> (5 times), <code>217</code> (3 times) — each sits outside the normal range (30.00 to 47.00 covers the middle half of the data) yet repeats often. Genuine extreme measurements usually appear once or twice, not dozens of times.</p>
+<p><span class='lbl'>Why it matters</span>If these are codes rather than measurements, every average, sum and total computed from this column is wrong. A handful of 999s in a column that otherwise tops out at 12 will dominate the mean without any warning.</p>
+<p><span class='lbl'>What to do</span>Check what these values mean in the source system. Common conventions are -1 or 999 for 'unknown', 0 for 'not recorded', and negative amounts marking returns. If they are codes, convert them to nulls before aggregating; if they mark a different kind of event, separate those rows out.</p>
+<pre><code>df['Customer Age'].value_counts().head(15)
+# then, once confirmed:
+df['Customer Age'] = df['Customer Age'].replace([0.0, 217.0], pd.NA)</code></pre>
+</div>
+<div class='finding' style='border-left-color:#A8660A'>
+<div class='head'>
+<h3><code>Notes</code> is completely empty</h3>
+<span class='pill' style='color:#A8660A;border-color:#A8660A'>Medium</span>
+<span class='pill' style='color:#5C6577;border-color:#DCE0E7'>Fix</span>
+</div>
+<p>Every value in this column is missing.</p>
+<p><span class='lbl'>Why it matters</span>It carries no information and cannot be used for anything.</p>
+<p><span class='lbl'>What to do</span>Drop it, after checking the source system was supposed to populate it.</p>
+<pre><code>df = df.drop(columns=['Notes'])</code></pre>
+</div>
+<div class='finding' style='border-left-color:#A8660A'>
+<div class='head'>
+<h3><code>Quantity</code> may use sentinel values for missing data</h3>
+<span class='pill' style='color:#A8660A;border-color:#A8660A'>Medium</span>
+<span class='pill' style='color:#5C6577;border-color:#DCE0E7'>Decide</span>
+</div>
+<p><code>999</code> (14 times), <code>-1</code> (10 times) — each sits outside the normal range (3.00 to 9.00 covers the middle half of the data) yet repeats often. Genuine extreme measurements usually appear once or twice, not dozens of times.</p>
+<p><span class='lbl'>Why it matters</span>If these are codes rather than measurements, every average, sum and total computed from this column is wrong. A handful of 999s in a column that otherwise tops out at 12 will dominate the mean without any warning.</p>
+<p><span class='lbl'>What to do</span>Check what these values mean in the source system. Common conventions are -1 or 999 for 'unknown', 0 for 'not recorded', and negative amounts marking returns. If they are codes, convert them to nulls before aggregating; if they mark a different kind of event, separate those rows out.</p>
+<pre><code>df['Quantity'].value_counts().head(15)
+# then, once confirmed:
+df['Quantity'] = df['Quantity'].replace([999.0, -1.0], pd.NA)</code></pre>
+</div>
+<div class='finding' style='border-left-color:#A8660A'>
+<div class='head'>
+<h3><code>Sales Rep</code> has leading or trailing whitespace</h3>
+<span class='pill' style='color:#A8660A;border-color:#A8660A'>Medium</span>
+<span class='pill' style='color:#5C6577;border-color:#DCE0E7'>Fix</span>
+</div>
+<p>574 values have spaces at the start or end.</p>
+<p><span class='lbl'>Why it matters</span>Joins and equality filters fail silently on these — <code>'Delhi ' != 'Delhi'</code>.</p>
+<p><span class='lbl'>What to do</span>Strip whitespace.</p>
+<pre><code>df['Sales Rep'] = df['Sales Rep'].str.strip()</code></pre>
+</div>
+<div class='finding' style='border-left-color:#A8660A'>
+<div class='head'>
+<h3><code>Unnamed: 14</code> is completely empty</h3>
+<span class='pill' style='color:#A8660A;border-color:#A8660A'>Medium</span>
+<span class='pill' style='color:#5C6577;border-color:#DCE0E7'>Fix</span>
+</div>
+<p>Every value in this column is missing.</p>
+<p><span class='lbl'>Why it matters</span>It carries no information and cannot be used for anything.</p>
+<p><span class='lbl'>What to do</span>Drop it, after checking the source system was supposed to populate it.</p>
+<pre><code>df = df.drop(columns=['Unnamed: 14'])</code></pre>
+</div>
+<div class='finding' style='border-left-color:#A8660A'>
+<div class='head'>
+<h3><code>order_date</code> contains dates in the future</h3>
+<span class='pill' style='color:#A8660A;border-color:#A8660A'>Medium</span>
+<span class='pill' style='color:#5C6577;border-color:#DCE0E7'>Decide</span>
+</div>
+<p>6 values are later than today.</p>
+<p><span class='lbl'>Why it matters</span>Future dates in a historical dataset usually mean a typo in the year, a placeholder, or a genuinely scheduled record mixed with completed ones.</p>
+<p><span class='lbl'>What to do</span>Inspect them; decide whether they belong in this analysis at all.</p>
+<pre><code>df[df['order_date'] &gt; pd.Timestamp.now()]</code></pre>
+</div>
+<div class='finding' style='border-left-color:#4C5670'>
+<div class='head'>
+<h3>Unnamed columns</h3>
+<span class='pill' style='color:#4C5670;border-color:#4C5670'>Low</span>
+<span class='pill' style='color:#5C6577;border-color:#DCE0E7'>Fix</span>
+</div>
+<p>1 column(s) have no header: <code>Unnamed: 14</code>.</p>
+<p><span class='lbl'>Why it matters</span>Usually a trailing comma or a stray column in the source export. Harmless, but they clutter every subsequent operation.</p>
+<p><span class='lbl'>What to do</span>Drop them after confirming they hold nothing you need.</p>
+<pre><code>df = df.loc[:, ~df.columns.str.match(r'^(Unnamed|\s*$)')]</code></pre>
+</div>
+<div class='finding' style='border-left-color:#4C5670'>
+<div class='head'>
+<h3><code>Currency</code> holds a single value</h3>
+<span class='pill' style='color:#4C5670;border-color:#4C5670'>Low</span>
+<span class='pill' style='color:#5C6577;border-color:#DCE0E7'>Fix</span>
+</div>
+<p>Every one of the 922 non-null rows is <code>INR</code>.</p>
+<p><span class='lbl'>Why it matters</span>It has zero variance, so it cannot explain anything or serve as a grouping key. It may still be worth keeping as documentation of scope.</p>
+<p><span class='lbl'>What to do</span>Note the value as a property of the dataset, then drop the column.</p>
+<pre><code>df = df.drop(columns=['Currency'])</code></pre>
+</div>
+<div class='finding' style='border-left-color:#4C5670'>
+<div class='head'>
+<h3><code>Customer Age</code> is 14.53% missing</h3>
+<span class='pill' style='color:#4C5670;border-color:#4C5670'>Low</span>
+<span class='pill' style='color:#5C6577;border-color:#DCE0E7'>Decide</span>
+</div>
+<p>134 of 922 rows have no value.</p>
+<p><span class='lbl'>Why it matters</span>Dropping these rows shrinks your sample; filling them invents data. Which is worse depends entirely on <em>why</em> they are missing.</p>
+<p><span class='lbl'>What to do</span>Ask whether the missingness is random. If the people who skipped this field differ systematically from those who did not — high earners declining to state income, say — then both dropping and mean-filling will bias your results, in opposite directions. Check whether the nulls cluster by date, source, or another column.</p>
+<pre><code>df[df['Customer Age'].isna()].describe(include='all')</code></pre>
+</div>
+<div class='finding' style='border-left-color:#4C5670'>
+<div class='head'>
+<h3><code>Customer Age</code> has values outside the usual range</h3>
+<span class='pill' style='color:#4C5670;border-color:#4C5670'>Low</span>
+<span class='pill' style='color:#5C6577;border-color:#DCE0E7'>Decide</span>
+</div>
+<p>The middle 50% sits between 30.00 and 47.00, but the full range runs 0.00 to 217.00.</p>
+<p><span class='lbl'>Why it matters</span>These may be genuine extremes, data entry errors, or a different kind of record mixed into the same column.</p>
+<p><span class='lbl'>What to do</span>Look at them individually before deciding. Outliers are often the most interesting rows in the dataset, not the least — removing them by rule is rarely the right first move.</p>
+<pre><code>q1, q3 = df['Customer Age'].quantile([.25, .75])
+iqr = q3 - q1
+df[(df['Customer Age'] &lt; q1 - 1.5*iqr) | (df['Customer Age'] &gt; q3 + 1.5*iqr)]</code></pre>
+</div>
+<div class='finding' style='border-left-color:#4C5670'>
+<div class='head'>
+<h3><code>Is Member</code> is a yes/no field stored as text</h3>
+<span class='pill' style='color:#4C5670;border-color:#4C5670'>Low</span>
+<span class='pill' style='color:#5C6577;border-color:#DCE0E7'>Fix</span>
+</div>
+<p>Only two distinct values: <code>No</code>, <code>Yes</code>.</p>
+<p><span class='lbl'>Why it matters</span>Boolean dtype is smaller and works directly with <code>.sum()</code> and filters.</p>
+<p><span class='lbl'>What to do</span>Map to True/False.</p>
+<pre><code>df['Is Member'] = df['Is Member'].str.strip().str.lower().map({'yes': True, 'no': False, 'y': True, 'n': False, 'true': True, 'false': False})</code></pre>
+</div>
+<div class='finding' style='border-left-color:#4C5670'>
+<div class='head'>
+<h3><code>Quantity</code> is heavily right-skewed</h3>
+<span class='pill' style='color:#4C5670;border-color:#4C5670'>Low</span>
+<span class='pill' style='color:#5C6577;border-color:#DCE0E7'>Decide</span>
+</div>
+<p>Skew is 7.9, and the mean (20.98) sits above the median (6.00) by 14.98 — around 250% of the interquartile spread.</p>
+<p><span class='lbl'>Why it matters</span>A long tail is pulling the mean away from the typical row, so the average describes the tail more than the bulk of the data. Any method assuming normality will also be poorly calibrated.</p>
+<p><span class='lbl'>What to do</span>Report the median alongside the mean, and consider a log scale for charts. Check first whether the tail is genuine or the result of a few bad values.</p>
+</div>
+<div class='finding' style='border-left-color:#4C5670'>
+<div class='head'>
+<h3><code>Quantity</code> has values outside the usual range</h3>
+<span class='pill' style='color:#4C5670;border-color:#4C5670'>Low</span>
+<span class='pill' style='color:#5C6577;border-color:#DCE0E7'>Decide</span>
+</div>
+<p>The middle 50% sits between 3.00 and 9.00, but the full range runs -1.00 to 999.00.</p>
+<p><span class='lbl'>Why it matters</span>These may be genuine extremes, data entry errors, or a different kind of record mixed into the same column.</p>
+<p><span class='lbl'>What to do</span>Look at them individually before deciding. Outliers are often the most interesting rows in the dataset, not the least — removing them by rule is rarely the right first move.</p>
+<pre><code>q1, q3 = df['Quantity'].quantile([.25, .75])
+iqr = q3 - q1
+df[(df['Quantity'] &lt; q1 - 1.5*iqr) | (df['Quantity'] &gt; q3 + 1.5*iqr)]</code></pre>
+</div>
+<div class='finding' style='border-left-color:#4C5670'>
+<div class='head'>
+<h3><code>Revenue</code> has values outside the usual range</h3>
+<span class='pill' style='color:#4C5670;border-color:#4C5670'>Low</span>
+<span class='pill' style='color:#5C6577;border-color:#DCE0E7'>Decide</span>
+</div>
+<p>The middle 50% sits between 646.57 and 1,332.51, but the full range runs 90.92 to 2,905.26.</p>
+<p><span class='lbl'>Why it matters</span>These may be genuine extremes, data entry errors, or a different kind of record mixed into the same column.</p>
+<p><span class='lbl'>What to do</span>Look at them individually before deciding. Outliers are often the most interesting rows in the dataset, not the least — removing them by rule is rarely the right first move.</p>
+<pre><code>q1, q3 = df['Revenue'].quantile([.25, .75])
+iqr = q3 - q1
+df[(df['Revenue'] &lt; q1 - 1.5*iqr) | (df['Revenue'] &gt; q3 + 1.5*iqr)]</code></pre>
+</div>
+<h2>Columns</h2><table><thead><tr>
+<th class='num'>#</th>
+<th class=''>Column</th>
+<th class=''>Stored as</th>
+<th class=''>Reads as</th>
+<th class='num'>Missing</th>
+<th class='num'>Distinct</th>
+<th class='num'>Issues</th>
+</tr></thead><tbody>
+<tr><td class='num'>0</td><td class='mono'>Order ID</td><td>str</td><td>identifier</td><td class='num'>0.0%</td><td class='num'>882</td><td class='num'><span style='color:#A61B2B;font-weight:500'>1</span></td></tr>
+<tr><td class='num'>1</td><td class='mono'>order_date</td><td>str</td><td>datetime</td><td class='num'>0.0%</td><td class='num'>401</td><td class='num'><span style='color:#A61B2B;font-weight:500'>2</span></td></tr>
+<tr><td class='num'>2</td><td class='mono'>City</td><td>str</td><td>categorical</td><td class='num'>4.77%</td><td class='num'>12</td><td class='num'><span style='color:#A61B2B;font-weight:500'>2</span></td></tr>
+<tr><td class='num'>3</td><td class='mono'>Revenue</td><td>str</td><td>numeric</td><td class='num'>2.71%</td><td class='num'>873</td><td class='num'><span style='color:#A61B2B;font-weight:500'>2</span></td></tr>
+<tr><td class='num'>4</td><td class='mono'>Discount</td><td>str</td><td>numeric</td><td class='num'>0.0%</td><td class='num'>327</td><td class='num'><span style='color:#A61B2B;font-weight:500'>1</span></td></tr>
+<tr><td class='num'>5</td><td class='mono'>Quantity</td><td>float64</td><td>numeric</td><td class='num'>0.0%</td><td class='num'>13</td><td class='num'><span style='color:#A61B2B;font-weight:500'>4</span></td></tr>
+<tr><td class='num'>6</td><td class='mono'>Customer Age</td><td>float64</td><td>numeric</td><td class='num'>14.53%</td><td class='num'>67</td><td class='num'><span style='color:#A8660A;font-weight:500'>3</span></td></tr>
+<tr><td class='num'>7</td><td class='mono'>Is Member</td><td>str</td><td>boolean</td><td class='num'>0.0%</td><td class='num'>2</td><td class='num'><span style='color:#4C5670;font-weight:500'>1</span></td></tr>
+<tr><td class='num'>8</td><td class='mono'>Channel</td><td>str</td><td>categorical</td><td class='num'>0.0%</td><td class='num'>3</td><td class='num'></td></tr>
+<tr><td class='num'>9</td><td class='mono'>Sales Channel</td><td>str</td><td>categorical</td><td class='num'>0.0%</td><td class='num'>3</td><td class='num'></td></tr>
+<tr><td class='num'>10</td><td class='mono'>Currency</td><td>str</td><td>constant</td><td class='num'>0.0%</td><td class='num'>1</td><td class='num'><span style='color:#4C5670;font-weight:500'>1</span></td></tr>
+<tr><td class='num'>11</td><td class='mono'>Sales Rep</td><td>str</td><td>categorical</td><td class='num'>0.0%</td><td class='num'>5</td><td class='num'><span style='color:#A8660A;font-weight:500'>1</span></td></tr>
+<tr><td class='num'>12</td><td class='mono'>Email</td><td>str</td><td>identifier</td><td class='num'>0.0%</td><td class='num'>900</td><td class='num'><span style='color:#A61B2B;font-weight:500'>1</span></td></tr>
+<tr><td class='num'>13</td><td class='mono'>Notes</td><td>float64</td><td>empty</td><td class='num'>100.0%</td><td class='num'>0</td><td class='num'><span style='color:#A8660A;font-weight:500'>1</span></td></tr>
+<tr><td class='num'>14</td><td class='mono'>Unnamed: 14</td><td>float64</td><td>empty</td><td class='num'>100.0%</td><td class='num'>0</td><td class='num'><span style='color:#A8660A;font-weight:500'>1</span></td></tr>
+</tbody></table>
+<h2>Column detail</h2>
+<div class='colcard'>
+<div class='name'>Order ID</div>
+<div class='meta'>identifier · stored as str · 922 values · 882 distinct · 0.0% missing</div>
+<table style='margin-top:4px'>
+<tr><td class='mono' style='width:45%'>ORD-1440</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:100%'></div></td><td class='num' style='width:22%'>2 (0.2%)</td></tr>
+<tr><td class='mono' style='width:45%'>ORD-1688</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:100%'></div></td><td class='num' style='width:22%'>2 (0.2%)</td></tr>
+<tr><td class='mono' style='width:45%'>ORD-1138</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:100%'></div></td><td class='num' style='width:22%'>2 (0.2%)</td></tr>
+<tr><td class='mono' style='width:45%'>ORD-1191</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:100%'></div></td><td class='num' style='width:22%'>2 (0.2%)</td></tr>
+<tr><td class='mono' style='width:45%'>ORD-1489</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:100%'></div></td><td class='num' style='width:22%'>2 (0.2%)</td></tr>
+<tr><td class='mono' style='width:45%'>ORD-1431</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:100%'></div></td><td class='num' style='width:22%'>2 (0.2%)</td></tr>
+</table>
+</div>
+<div class='colcard'>
+<div class='name'>order_date</div>
+<div class='meta'>datetime · stored as str · 922 values · 401 distinct · 0.0% missing</div>
+<div class='kv'>
+<div><span>from</span>2025-02-03</div>
+<div><span>to</span>2031-08-14</div>
+<div><span>span</span>2,383d</div>
+<div><span>future</span>6</div>
+</div>
+</div>
+<div class='colcard'>
+<div class='name'>City</div>
+<div class='meta'>categorical · stored as str · 878 values · 12 distinct · 4.77% missing</div>
+<table style='margin-top:4px'>
+<tr><td class='mono' style='width:45%'>Bengaluru</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:100%'></div></td><td class='num' style='width:22%'>148 (16.9%)</td></tr>
+<tr><td class='mono' style='width:45%'>Mumbai</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:82%'></div></td><td class='num' style='width:22%'>121 (13.8%)</td></tr>
+<tr><td class='mono' style='width:45%'>Delhi</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:81%'></div></td><td class='num' style='width:22%'>120 (13.7%)</td></tr>
+<tr><td class='mono' style='width:45%'>Chennai</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:76%'></div></td><td class='num' style='width:22%'>112 (12.8%)</td></tr>
+<tr><td class='mono' style='width:45%'>Kolkata</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:57%'></div></td><td class='num' style='width:22%'>84 (9.6%)</td></tr>
+<tr><td class='mono' style='width:45%'>mumbai</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:44%'></div></td><td class='num' style='width:22%'>65 (7.4%)</td></tr>
+</table>
+</div>
+<div class='colcard'>
+<div class='name'>Revenue</div>
+<div class='meta'>numeric · stored as str · 897 values · 873 distinct · 2.71% missing</div>
+<div class='kv'>
+<div><span>mean</span>1e+03</div>
+<div><span>median</span>990.24</div>
+<div><span>std</span>518.67</div>
+<div><span>min</span>90.92</div>
+<div><span>q1</span>646.57</div>
+<div><span>q3</span>1.3e+03</div>
+<div><span>max</span>2.9e+03</div>
+<div><span>zeros</span>0</div>
+<div><span>neg</span>0</div>
+</div>
+<div class='hist'><span style='height:28%' title='90.92 – 372.4: 54'></span><span style='height:91%' title='372.4 – 653.8: 173'></span><span style='height:100%' title='653.8 – 935.2: 190'></span><span style='height:98%' title='935.2 – 1,217: 187'></span><span style='height:68%' title='1,217 – 1,498: 129'></span><span style='height:42%' title='1,498 – 1,780: 80'></span><span style='height:23%' title='1,780 – 2,061: 43'></span><span style='height:10%' title='2,061 – 2,342: 19'></span><span style='height:8%' title='2,342 – 2,624: 15'></span><span style='height:4%' title='2,624 – 2,905: 7'></span></div>
+</div>
+<div class='colcard'>
+<div class='name'>Discount</div>
+<div class='meta'>numeric · stored as str · 922 values · 327 distinct · 0.0% missing</div>
+<div class='kv'>
+<div><span>mean</span>17.25</div>
+<div><span>median</span>17.20</div>
+<div><span>std</span>10.02</div>
+<div><span>min</span>0.10</div>
+<div><span>q1</span>8.50</div>
+<div><span>q3</span>25.90</div>
+<div><span>max</span>35.00</div>
+<div><span>zeros</span>0</div>
+<div><span>neg</span>0</div>
+</div>
+<div class='hist'><span style='height:92%' title='0.1 – 3.59: 93'></span><span style='height:100%' title='3.59 – 7.08: 101'></span><span style='height:92%' title='7.08 – 10.57: 93'></span><span style='height:91%' title='10.57 – 14.06: 92'></span><span style='height:85%' title='14.06 – 17.55: 86'></span><span style='height:97%' title='17.55 – 21.04: 98'></span><span style='height:96%' title='21.04 – 24.53: 97'></span><span style='height:98%' title='24.53 – 28.02: 99'></span><span style='height:76%' title='28.02 – 31.51: 77'></span><span style='height:85%' title='31.51 – 35: 86'></span></div>
+</div>
+<div class='colcard'>
+<div class='name'>Quantity</div>
+<div class='meta'>numeric · stored as float64 · 922 values · 13 distinct · 0.0% missing</div>
+<div class='kv'>
+<div><span>mean</span>20.98</div>
+<div><span>median</span>6.00</div>
+<div><span>std</span>121.55</div>
+<div><span>min</span>-1.00</div>
+<div><span>q1</span>3.00</div>
+<div><span>q3</span>9.00</div>
+<div><span>max</span>999.00</div>
+<div><span>zeros</span>0</div>
+<div><span>neg</span>10</div>
+</div>
+<div class='hist'><span style='height:100%' title='-1 – 99: 908'></span><span style='height:0%' title='99 – 199: 0'></span><span style='height:0%' title='199 – 299: 0'></span><span style='height:0%' title='299 – 399: 0'></span><span style='height:0%' title='399 – 499: 0'></span><span style='height:0%' title='499 – 599: 0'></span><span style='height:0%' title='599 – 699: 0'></span><span style='height:0%' title='699 – 799: 0'></span><span style='height:0%' title='799 – 899: 0'></span><span style='height:2%' title='899 – 999: 14'></span></div>
+</div>
+<div class='colcard'>
+<div class='name'>Customer Age</div>
+<div class='meta'>numeric · stored as float64 · 788 values · 67 distinct · 14.53% missing</div>
+<div class='kv'>
+<div><span>mean</span>39.07</div>
+<div><span>median</span>39.00</div>
+<div><span>std</span>16.78</div>
+<div><span>min</span>0.00</div>
+<div><span>q1</span>30.00</div>
+<div><span>q3</span>47.00</div>
+<div><span>max</span>217.00</div>
+<div><span>zeros</span>5</div>
+<div><span>neg</span>0</div>
+</div>
+<div class='hist'><span style='height:15%' title='0 – 21.7: 69'></span><span style='height:100%' title='21.7 – 43.4: 448'></span><span style='height:56%' title='43.4 – 65.1: 252'></span><span style='height:4%' title='65.1 – 86.8: 16'></span><span style='height:0%' title='86.8 – 108.5: 0'></span><span style='height:0%' title='108.5 – 130.2: 0'></span><span style='height:0%' title='130.2 – 151.9: 0'></span><span style='height:0%' title='151.9 – 173.6: 0'></span><span style='height:0%' title='173.6 – 195.3: 0'></span><span style='height:1%' title='195.3 – 217: 3'></span></div>
+</div>
+<div class='colcard'>
+<div class='name'>Is Member</div>
+<div class='meta'>boolean · stored as str · 922 values · 2 distinct · 0.0% missing</div>
+<table style='margin-top:4px'>
+<tr><td class='mono' style='width:45%'>No</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:100%'></div></td><td class='num' style='width:22%'>613 (66.5%)</td></tr>
+<tr><td class='mono' style='width:45%'>Yes</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:50%'></div></td><td class='num' style='width:22%'>309 (33.5%)</td></tr>
+</table>
+</div>
+<div class='colcard'>
+<div class='name'>Channel</div>
+<div class='meta'>categorical · stored as str · 922 values · 3 distinct · 0.0% missing</div>
+<table style='margin-top:4px'>
+<tr><td class='mono' style='width:45%'>Online</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:100%'></div></td><td class='num' style='width:22%'>530 (57.5%)</td></tr>
+<tr><td class='mono' style='width:45%'>Store</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:58%'></div></td><td class='num' style='width:22%'>309 (33.5%)</td></tr>
+<tr><td class='mono' style='width:45%'>Partner</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:16%'></div></td><td class='num' style='width:22%'>83 (9.0%)</td></tr>
+</table>
+</div>
+<div class='colcard'>
+<div class='name'>Sales Channel</div>
+<div class='meta'>categorical · stored as str · 922 values · 3 distinct · 0.0% missing</div>
+<table style='margin-top:4px'>
+<tr><td class='mono' style='width:45%'>Online</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:100%'></div></td><td class='num' style='width:22%'>530 (57.5%)</td></tr>
+<tr><td class='mono' style='width:45%'>Store</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:58%'></div></td><td class='num' style='width:22%'>309 (33.5%)</td></tr>
+<tr><td class='mono' style='width:45%'>Partner</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:16%'></div></td><td class='num' style='width:22%'>83 (9.0%)</td></tr>
+</table>
+</div>
+<div class='colcard'>
+<div class='name'>Currency</div>
+<div class='meta'>constant · stored as str · 922 values · 1 distinct · 0.0% missing</div>
+</div>
+<div class='colcard'>
+<div class='name'>Sales Rep</div>
+<div class='meta'>categorical · stored as str · 922 values · 5 distinct · 0.0% missing</div>
+<table style='margin-top:4px'>
+<tr><td class='mono' style='width:45%'>R. Iyer </td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:100%'></div></td><td class='num' style='width:22%'>207 (22.5%)</td></tr>
+<tr><td class='mono' style='width:45%'>P. Nair </td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:97%'></div></td><td class='num' style='width:22%'>201 (21.8%)</td></tr>
+<tr><td class='mono' style='width:45%'>A. Sharma</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:93%'></div></td><td class='num' style='width:22%'>192 (20.8%)</td></tr>
+<tr><td class='mono' style='width:45%'>  M. Khan</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:80%'></div></td><td class='num' style='width:22%'>166 (18.0%)</td></tr>
+<tr><td class='mono' style='width:45%'>S. Bose</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:75%'></div></td><td class='num' style='width:22%'>156 (16.9%)</td></tr>
+</table>
+</div>
+<div class='colcard'>
+<div class='name'>Email</div>
+<div class='meta'>identifier · stored as str · 922 values · 900 distinct · 0.0% missing</div>
+<table style='margin-top:4px'>
+<tr><td class='mono' style='width:45%'>customer440@example.com</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:100%'></div></td><td class='num' style='width:22%'>2 (0.2%)</td></tr>
+<tr><td class='mono' style='width:45%'>customer688@example.com</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:100%'></div></td><td class='num' style='width:22%'>2 (0.2%)</td></tr>
+<tr><td class='mono' style='width:45%'>customer138@example.com</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:100%'></div></td><td class='num' style='width:22%'>2 (0.2%)</td></tr>
+<tr><td class='mono' style='width:45%'>customer191@example.com</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:100%'></div></td><td class='num' style='width:22%'>2 (0.2%)</td></tr>
+<tr><td class='mono' style='width:45%'>customer341@example.com</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:100%'></div></td><td class='num' style='width:22%'>2 (0.2%)</td></tr>
+<tr><td class='mono' style='width:45%'>customer147@example.com</td><td><div style='background:#1F4C73;opacity:.75;height:8px;width:100%'></div></td><td class='num' style='width:22%'>2 (0.2%)</td></tr>
+</table>
+</div>
+<div class='colcard'>
+<div class='name'>Notes</div>
+<div class='meta'>empty · stored as float64 · 0 values · 0 distinct · 100.0% missing</div>
+</div>
+<div class='colcard'>
+<div class='name'>Unnamed: 14</div>
+<div class='meta'>empty · stored as float64 · 0 values · 0 distinct · 100.0% missing</div>
+</div>
+<footer>This report does not know what the data is for, how it was collected, or which columns matter to your question. It flags patterns that are usually problems. Confirming whether they are problems here — and deciding what to do about them — remains the analyst's job.</footer>
+</div></body></html>

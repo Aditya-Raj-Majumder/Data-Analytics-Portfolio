@@ -1,0 +1,27 @@
+
+SENTINEL THRESHOLD SENSITIVITY
+==============================================================================
+ rate min_repeats (922 rows)  found  false_alarms  missed precision recall
+0.001                    3.0      4             0       0      1.00   1.00
+0.002                    3.0      4             0       0      1.00   1.00
+0.003                    3.0      4             0       0      1.00   1.00
+0.005                    4.6      3             0       1      1.00   0.75
+0.008                    7.4      2             0       2      1.00   0.50
+0.010                    9.2      2             0       2      1.00   0.50
+0.015                   13.8      1             0       3      1.00   0.25
+0.020                   18.4      0             0       4         —   0.00
+0.030                   27.7      0             0       4         —   0.00
+==============================================================================
+
+What each rate actually flags:
+
+  rate=0.001  messy_sales.csv:Quantity=-1 (ok); messy_sales.csv:Quantity=999 (ok); messy_sales.csv:Customer Age=0 (ok); messy_sales.csv:Customer Age=217 (ok)
+  rate=0.002  messy_sales.csv:Quantity=-1 (ok); messy_sales.csv:Quantity=999 (ok); messy_sales.csv:Customer Age=0 (ok); messy_sales.csv:Customer Age=217 (ok)
+  rate=0.003  messy_sales.csv:Quantity=-1 (ok); messy_sales.csv:Quantity=999 (ok); messy_sales.csv:Customer Age=0 (ok); messy_sales.csv:Customer Age=217 (ok)
+  rate=0.005  messy_sales.csv:Quantity=-1 (ok); messy_sales.csv:Quantity=999 (ok); messy_sales.csv:Customer Age=0 (ok)
+  rate=0.008  messy_sales.csv:Quantity=-1 (ok); messy_sales.csv:Quantity=999 (ok)
+  rate=0.01   messy_sales.csv:Quantity=-1 (ok); messy_sales.csv:Quantity=999 (ok)
+  rate=0.015  messy_sales.csv:Quantity=999 (ok)
+  rate=0.02   (nothing)
+  rate=0.03   (nothing)
+
