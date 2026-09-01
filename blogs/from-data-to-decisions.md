@@ -121,6 +121,6 @@ Every dataset tells a story. The real skill lies in discovering that story and u
 
 **Aditya Raj Majumder**
 
-🎓 *Junior Data Analyst*
+🎓 *Data Analyst*
 
 📬 Connect with me on [LinkedIn](https://www.linkedin.com/in/aditya-raj-majumder-600533250/) | 🌐 Explore my projects on [GitHub](https://github.com/Aditya-Raj-Majumder)
