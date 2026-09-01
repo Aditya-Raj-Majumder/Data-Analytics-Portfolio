@@ -305,5 +305,5 @@ eye.*
 ---
 
 **Author:** Aditya Raj Majumder  
-🎓 Junior Data Analyst  
+🎓 Data Analyst  
 🔗 [LinkedIn](https://www.linkedin.com/in/aditya-raj-majumder-600533250/) | [GitHub](https://github.com/Aditya-Raj-Majumder)
