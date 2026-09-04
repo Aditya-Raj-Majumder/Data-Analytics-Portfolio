@@ -1,0 +1,132 @@
+// ============================================================
+// DAX measures and calculated columns
+// Olist — Delivery Promises vs Delivery Speed
+//
+// All measures are homed on fact_orders. This file is a readable
+// reference; the definitions live in olist_delivery_promises.pbix.
+// ============================================================
+
+
+// ------------------------------------------------------------
+// CALCULATED COLUMNS (fact_orders)
+// ------------------------------------------------------------
+
+// Quartile boundaries are the observed 25th/50th/75th percentiles of
+// delivery_days (6.8 / 10.2 / 15.7). Numeric prefixes force correct
+// sort order, since the column sorts as text.
+Speed Quartile =
+VAR d = fact_orders[delivery_days]
+RETURN
+    SWITCH(
+        TRUE(),
+        d <= 6.8,  "1 Fastest",
+        d <= 10.2, "2 Fast",
+        d <= 15.7, "3 Slow",
+                   "4 Slowest"
+    )
+
+// Readable legend label. A raw is_late legend renders as 0 and 1.
+Delivery Outcome =
+IF(fact_orders[is_late] = 1, "Arrived late", "Arrived on time")
+
+
+// ------------------------------------------------------------
+// BASE MEASURES
+// ------------------------------------------------------------
+
+Orders = COUNTROWS(fact_orders)
+
+Late Orders = CALCULATE([Orders], fact_orders[is_late] = 1)
+
+Late Rate = DIVIDE([Late Orders], [Orders])
+
+// 646 orders have no review. Rate measures divide by this, not by
+// [Orders] -- otherwise the one-star rate is understated wherever
+// reviews are missing.
+Reviewed Orders = CALCULATE([Orders], NOT ISBLANK(fact_orders[review_score]))
+
+One Star Orders = SUM(fact_orders[is_one_star])
+
+One Star Rate = DIVIDE([One Star Orders], [Reviewed Orders])
+
+
+// ------------------------------------------------------------
+// PHASE MEASURES  (page 2 — Where the Delay Is)
+//
+// Medians, not means: delivery times have a long right tail
+// (maximum 209 days) and means chase the outliers.
+//
+// All three exclude the 1,373 orders whose carrier pickup timestamp
+// precedes payment approval. Their lateness is still trustworthy;
+// only the phase split is not.
+// ------------------------------------------------------------
+
+Median Approval Days =
+CALCULATE(
+    MEDIAN(fact_orders[approval_days]),
+    fact_orders[data_quality_flag] = "ok"
+)
+
+Median Handoff Days =
+CALCULATE(
+    MEDIAN(fact_orders[handoff_days]),
+    fact_orders[data_quality_flag] = "ok"
+)
+
+Median Transit Days =
+CALCULATE(
+    MEDIAN(fact_orders[transit_days]),
+    fact_orders[data_quality_flag] = "ok"
+)
+
+// Headline measure for page 2: how much longer the carrier holds a
+// late parcel than an on-time one. Returns 17.0 days.
+Transit Excess Days =
+VAR LateTransit   = CALCULATE([Median Transit Days], fact_orders[is_late] = 1)
+VAR OnTimeTransit = CALCULATE([Median Transit Days], fact_orders[is_late] = 0)
+RETURN
+    LateTransit - OnTimeTransit
+
+
+// ------------------------------------------------------------
+// BUFFER MEASURES  (page 3 — The Buffer Gap)
+// ------------------------------------------------------------
+
+P90 Delivery Days = PERCENTILE.INC(fact_orders[delivery_days], 0.90)
+
+Median Promised Days = MEDIAN(fact_orders[promised_days])
+
+// Headline measure for page 3.
+// Positive => the promise fails to cover this route's 90th-percentile
+//             order (under-promised)
+// Negative => the route is over-padded and could commit to a sooner date
+Buffer Shortfall = [P90 Delivery Days] - [Median Promised Days]
+
+// Count of states whose promise falls short of their own 90th
+// percentile. The >= 300 condition matches the visual-level filter on
+// the bar chart, so the card and the chart describe the same
+// population. Returns 12.
+States Under-Promised =
+CALCULATE(
+    DISTINCTCOUNT(dim_customer[customer_state]),
+    FILTER(
+        VALUES(dim_customer[customer_state]),
+        [Buffer Shortfall] > 0 && [Orders] >= 300
+    )
+)
+
+// One-star rate within under-promised states only. Returns 13.4%,
+// against 9.8% nationally -- the cost of the mis-set buffer.
+//
+// The >= 300 condition changes the result by 0.002pp (only Roraima,
+// with 41 reviewed orders, is excluded). It is kept anyway so this
+// measure and the chart are provably consistent rather than
+// coincidentally so.
+One Star (Under-Promised) =
+VAR UnderPromised =
+    FILTER(
+        VALUES(dim_customer[customer_state]),
+        [Buffer Shortfall] > 0 && [Orders] >= 300
+    )
+RETURN
+    CALCULATE([One Star Rate], KEEPFILTERS(UnderPromised))
